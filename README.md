@@ -12,3 +12,5 @@
 - Download the zip and extract to `./backend/data` file <-- once created.
 ## Install Dependencies
 - Run `pip install -r requirements.txt` to Install needed dependencies for project.
+## Further Information 
+- https://github.com/xavierb117/Applied-AI-YOLO-Walkthrough 
