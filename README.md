@@ -6,6 +6,9 @@
 - Start Virtual Environment `./backend/venv\Scripts\Activate.ps1`
 ## Label Images
 - Label Images on Label-Studio using `docker run -it -p 8080:8080 -v $(pwd)/data/labelstudio:/label-studio/data heartexlabs/label-studio:latest` This Docker command runs at `http://localhost:8080`
-- Or we can alternatively install Label-Studio into our Virtual Environment with `pip install -U label-studio` Then start with `label-studio start` 
+- Collect photos without salamanders in them.
+- Draw bounding boxes **Object Detection with Bounding Boxes** <-- Select on Label-Studio
+- Export Images select **YOLO with Images**
+- Download the zip and extract to `./backend/data` file <-- once created.
 ## Install Dependencies
 - Run `pip install -r requirements.txt` to Install needed dependencies for project.
