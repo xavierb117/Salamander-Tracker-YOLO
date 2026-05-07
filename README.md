@@ -1,6 +1,7 @@
 # Salamander YOLO Project
 ## Starting out
-- Capture images from ensantina.mp4 for training and testing
+- Capture images from **ensantina.mp4** for training and testing 
+    - Capture photos using screenshots of the **ensantina.mp4** or when new data for salamanders to train on becomes available.
 - Create Virtual Environment `python -m venv venv`
 - Start Virtual Environment `venv\Scripts\Activate.ps1`
 ## Label Images
