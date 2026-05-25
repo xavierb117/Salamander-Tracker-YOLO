@@ -4,24 +4,42 @@ export default function Video() {
     const [file, setFile] = useState();
     const [response, setResponse] = useState();
     const [loading, setLoading] = useState(false);
+    const [percent, setPercent] = useState(0);
     
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        try {
-            const form = new FormData();
-            form.append("video", file);
-            const res = await fetch("http://localhost:8000/track", { method: "POST", body: form });
-            const json = await res.json()
-            setResponse(json)
-        }
-        catch (err) {
-            console.error(`Failed to fetch JSON:`, err);
-        }
-        finally {
-            setLoading(false);
-        }
+    e.preventDefault();
+
+    setLoading(true);
+    setPercent(0);
+    setResponse(null);
+
+    try {
+        const form = new FormData();
+        form.append("video", file);
+
+        await fetch("http://localhost:8000/track", {
+            method: "POST",
+            body: form
+        });
+
+        const interval = setInterval(async () => {
+            const res = await fetch("http://localhost:8000/track");
+            const json = await res.json();
+
+            setPercent(json.percent || 0);
+
+            if (json.status === "done") {
+                setResponse(json.result);
+                setLoading(false);
+                clearInterval(interval);
+            }
+        }, 1000);
+
+    } catch (err) {
+        console.error(`Failed to fetch JSON:`, err);
+        setLoading(false);
     }
+};
 
     return (
         <>
@@ -36,7 +54,13 @@ export default function Video() {
                 </label>
                 <button type="submit" disabled={loading}> {loading ? "Processing..." : "Submit"} </button>
             </form>
-            {loading && <p>Processing video...</p>}
+            {loading && (
+                <>
+                    <p>Processing video...</p>
+                    <progress value={percent} max={100} style={{ width: "300px" }} />
+                    <p>{percent}%</p>
+                </>
+            )}
             {response && 
                 <>
                     <video src={response.video_url} controls />
