@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 export default function Home() {
-    const [salamanderData, setSalamanderData] = useState({});
+    const [salamanderData, setSalamanderData] = useState();
 
     useEffect(() => {
         async function load() {
