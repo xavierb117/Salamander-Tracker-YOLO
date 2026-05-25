@@ -2,15 +2,20 @@
 ## Frames Labeled & Dataset and training pipeline
 ### *Total Frames Labeled:* **72**
 ### Dataset & Pipeline
+- Before creating our dataset, we had to prepare our pipeline by creating a separate repo for creating our model. 
 - We took photos of fake salamanders provided in class. We took multiple photos with different angles, different backgrounds, different amounts of salamanders, and also some without any salamanders to get an even amount of training.
-- We uploaded those photos to LabelStudio and then drew bounding boxes around the salamanders. 
-## How to run
-- Create a venv *(Virtual Environment)* `python -m venv ./venv` then run `.\venv\Scripts\activate`
-- run `pip install -r requirements.txt`
-- Have two terminals open
-- `cd backend` and run `python main.py` in one
-- `cd frontend` and run `npm run dev` in the other
-- upload video
-## Color masking vs YOLO review
-- Color masking was interesting because it took a lot of thinking and digesting of the material and libraries to understand how to work with and build the program. Apart from learning it wasn't always accurate for detection. Different shades could throw it off easily, and having the wrong color selected could highlight unwanted areas. Although it isn't as accurate as a trained model, it still has its benefits towards detection, brightly colored objects can be one.
-- The YOLO model was also fun to learn and mess with, it took a little bit of understanding before it was obvious what it was capable of. Its been really easy to work with and progress with. Taking photos then using LabelStudios UI to draw bounding boxes around the salamanders has been easy todo vs understanding the euclidean color distance, but overall humbling learning how much training goes behind a powerful model.
+- We uploaded those photos to LabelStudio, then we used "Object Detection with Bounding Boxes". We drew bounding boxes around the salamanders, if a picture had one. These bounding boxes helped classify the salmanders, as the only class present was "Salamander" to show if the picture had salamanders or not. 
+- These labels were exported as "YOLO with Images" and were extracted to a data folder. From there, we had to split the data between training and validation, we checked how our pictures would be augmented, and then we trained the model. We tested the model through a live webcam, and we exported the "best.pt" model to this project once it had good enough detection. 
+- No training occured in this project repo, but it used the model we created in the other repo. The backend ran YOLO on every frame of an uploaded video to create bounding boxes, class labels and unqiue target IDS. The output gets saved and the frontend retrieves it to output the annotated video and 2 different metrics.  
+## How to run (Both setting up the code AND running the app)
+- Clone repo, create a terminal (preferably powershell), cd to backend
+- Run `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
+- Create a venv *(Virtual Environment)* `python -m venv ./venv` then run `.\venv\Scripts\activate`. You should have (venv) at the left of your terminal.
+- Run `pip install -r requirements.txt`. MAKE SURE THE VENV INTERPRETER IS THE VENV IN THE BACKEND.
+- Run `python main.py` in backend, keep this running on localhost:8000 for the app to run. 
+- Create a new terminal. `cd frontend`, run `npm i`, then run `npm run dev` for the website. Go to localhost:5173
+- On the website, the upload buttom prompts you for a video. Upload a video (preferably short), and wait for the process to finish.
+- Once the process finishes, you will have your video back with bounding boxes and metrics for the analysis. 
+## Color masking vs YOLO
+- Color masking was interesting because it took a lot of thinking and digesting of the material and libraries to understand how to work with and build the program. Apart from learning it wasn't always accurate for detection. Different shades could throw it off easily, and having the color you want selected could highlight unwanted areas. It could only track 1 centroid, so multiple salamanders wasn't viable. It still has its benefits towards detection, as long as the color was present it could be tracked. Also, there was no need for training/labled data at all, it would just analyze the video with whatever you logic you implemented. The speed of this without having to train data seems beneficial. The best place to use this could be if the environment was controlled. That means just one environment with distinct colors, and just 1 target to track.
+- The YOLO model was also fun to learn and mess with, it took a little bit of understanding before it was obvious what it was capable of. Its been really easy to work with and progress with. Taking photos then using LabelStudios UI to draw bounding boxes around the salamanders has been easy todo vs understanding the euclidean color distance, but overall humbling learning how much training goes behind a powerful model. Multiple salamanders can actually be tracked, and the lighting/color isn't much of a problem compared to color masking because it can be trained to accomdate for different colors/environments. That being said, sometimes the YOLO model falls short. The training data REALLY needs to be diverse in order to work correctly in varied environments, otherwise it fails to detect a salamander. Because of this, there can be a good chance that it won't catch the salamander even when it's clearly in the video. It can also take much more time to train a model, both collecting the data and verifying that the model works. The best place to use this could be with testing environments with varied conditions. As long as the model has the training data for it, an environment with varied colors, angles, and targets can work. 
