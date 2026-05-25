@@ -1,29 +1,16 @@
 # Salamander YOLO Project
-## Starting out
-- Clone this repo and open it in your editor
-- Create Virtual Environment `python -m venv ./backend/venv`
-- Start Virtual Environment `./backend/venv\Scripts\Activate.ps1`
-- Run `pip install -r requirements.txt` to Install needed dependencies for project.
-- Verify with `python -c "from ultralytics import YOLO; import cv2; print('ok')"`
-## Capture Images
-- Run `python ./backend/scripts/capture.py` for webcam access.
-- Capture images from **ensantina.mp4** for training and testing using the spacebar
-    - Capture photos using screenshots of the **ensantina.mp4** or when new data for salamanders to train on becomes available.
-- Aim for around 50 images for the labeling process.
-- Mix easy and hard frames. Change salamander locations, background, lighting, and even exclude salamander from the image.
-## Label Images
-- Label Images on Label-Studio using `docker run -it -p 8080:8080 -v $(pwd)/data/labelstudio:/label-studio/data heartexlabs/label-studio:latest` This Docker command runs at `http://localhost:8080`
-- Create a new project, then drag in all the photos from `data/captured` on Data Import.
-- On the Labeling Setup, choose Computer Vision > Object Detection with Bounding Boxes template, then edit the labels to match the classes you have (Salamander, No Salamander)
-- Draw bounding boxes on Salamanders, click submit if it has no salamander in it. DON'T ROTATE THE BOUNDING BOXES.
-- Once you are done, go to the project page and click Export.
-- Pick Yolo with Images as the format.
-- Download the zip and extract to `./backend/data` file <-- once created.
-## Prepare the Dataset
-- Run `python ./backend/scripts/prepare_dataset.py --export-dir ./backend/data` to prepare your dataset.
-## Visualize the Augmentations
-- Run `python ./backend/scripts/visualize_augmentations.py --image-dir ./backend/data/images` to visualize augmentations to your images.
-## Train the Model
-- Run `python ./backend/scripts/train.py`to train your model. (Pay attention to where the results get saved, results may not be saved here for some reason)
-## Further Information 
-- https://github.com/xavierb117/Applied-AI-YOLO-Walkthrough 
+## Frames Labeled & Dataset and training pipeline
+### *Total Frames Labeled:* **72**
+### Dataset & Pipeline
+- We took photos of fake salamanders provided in class. We took multiple photos with different angles, different backgrounds, different amounts of salamanders, and also some without any salamanders to get an even amount of training.
+- We uploaded those photos to LabelStudio and then drew bounding boxes around the salamanders. 
+## How to run
+- Create a venv *(Virtual Environment)* `python -m venv ./venv` then run `.\venv\Scripts\activate`
+- run `pip install -r requirements.txt`
+- Have two terminals open
+- `cd backend` and run `python main.py` in one
+- `cd frontend` and run `npm run dev` in the other
+- upload video
+## Color masking vs YOLO review
+- Color masking was interesting because it took a lot of thinking and digesting of the material and libraries to understand how to work with and build the program. Apart from learning it wasn't always accurate for detection. Different shades could throw it off easily, and having the wrong color selected could highlight unwanted areas. Although it isn't as accurate as a trained model, it still has its benefits towards detection, brightly colored objects can be one.
+- The YOLO model was also fun to learn and mess with, it took a little bit of understanding before it was obvious what it was capable of. Its been really easy to work with and progress with. Taking photos then using LabelStudios UI to draw bounding boxes around the salamanders has been easy todo vs understanding the euclidean color distance, but overall humbling learning how much training goes behind a powerful model.
