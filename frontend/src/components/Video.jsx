@@ -37,7 +37,29 @@ export default function Video() {
                 <button type="submit" disabled={loading}> {loading ? "Processing..." : "Submit"} </button>
             </form>
             {loading && <p>Processing video...</p>}
-            {response && <video src={response.video_url} controls />}
+            {response && 
+                <>
+                    <video src={response.video_url} controls />
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Track ID</th>
+                                <th>Label</th>
+                                <th>Time on Screen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {response.tracks.map((item, index) => (
+                                <tr key={index}>
+                                    <td>{item.track_id}</td>
+                                    <td>{item.label}</td>
+                                    <td>{item.time_on_screen_s}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </>
+            }
         </>
     );
 }
