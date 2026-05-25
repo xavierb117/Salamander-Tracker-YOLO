@@ -5,6 +5,8 @@ __pycache__/
 *.pyc
 
 # Editor / OS noise
+*.pt
+*.mp4
 .vscode/
 .idea/
 .DS_Store
