@@ -3,9 +3,11 @@ import { useState } from 'react';
 export default function Video() {
     const [file, setFile] = useState();
     const [response, setResponse] = useState();
+    const [loading, setLoading] = useState(false);
     
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const form = new FormData();
             form.append("video", file);
@@ -15,6 +17,9 @@ export default function Video() {
         }
         catch (err) {
             console.error(`Failed to fetch JSON:`, err);
+        }
+        finally {
+            setLoading(false);
         }
     }
 
@@ -29,8 +34,9 @@ export default function Video() {
                         onChange={(e) => setFile(e.target.files[0])}
                     />
                 </label>
-                <button type="submit">Submit</button>
+                <button type="submit" disabled={loading}> {loading ? "Processing..." : "Submit"} </button>
             </form>
+            {loading && <p>Processing video...</p>}
             {response && <video src={response.video_url} controls />}
         </>
     );
