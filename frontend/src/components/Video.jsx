@@ -22,21 +22,26 @@ export default function Video() {
             body: form
         });
 
-        const interval = setInterval(async () => {
-            const res = await fetch("http://localhost:8000/track");
-            const json = await res.json();
+        try {
+            const interval = setInterval(async () => {
+                const res = await fetch("http://localhost:8000/track");
+                const json = await res.json();
 
-            setPercent(json.percent || 0);
+                setPercent(json.percent || 0);
 
-            if (json.status === "done") {
-                setResponse(json.result);
-                setLoading(false);
-                clearInterval(interval);
-            }
-        }, 1000);
+                if (json.status === "done") {
+                    setResponse(json.result);
+                    setLoading(false);
+                    clearInterval(interval);
+                }
+            }, 1000);
+        } catch (err) {
+            console.error(`Failed to fetch Job Status:`, err);
+            setLoading(false);
+        }
 
     } catch (err) {
-        console.error(`Failed to fetch JSON:`, err);
+        console.error(`Failed to fetch Video JSON:`, err);
         setLoading(false);
     }
 };

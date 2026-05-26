@@ -107,7 +107,7 @@ def start_track(video: UploadFile = File(...)):
     job["status"] = "processing"
     job["percent"] = 0
 
-    tracks = run_track_job()
+    tracks = Thread(target=run_track_job, daemon=True).start()
 
     return {
         "status": "done",
