@@ -66,6 +66,14 @@ def run_track_job():
             writer.write(result.plot())
             job["percent"] = int(((frame_idx + 1) / total) * 100)
             boxes = result.boxes
+            if boxes.id is None:
+                cv2.putText(frame, "No Salamanders", (10, 30),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 200, 200), 2)
+            else:
+                count = len(boxes.id.tolist())
+                text = f"Salamanders: {count}"
+                cv2.putText(frame, text, (10, 30),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
             if boxes is not None and boxes.id is not None:
                 for tid, cls_id in zip(boxes.id.tolist(), boxes.cls.tolist()):
                     frames_seen[int(tid)] += 1
