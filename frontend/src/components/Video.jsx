@@ -15,6 +15,7 @@ function CountChart({ data }) {
     const points = data.map(d => `${xScale(d.time_s)},${yScale(d.count)}`).join(' ');
 
     const yTicks = Array.from({ length: maxCount + 1 }, (_, i) => i);
+    const xTicks = Array.from({ length: Math.floor(maxTime) + 1 }, (_, i) => i);
 
     return (
         <svg width={W} height={H} style={{ display: 'block', margin: '16px 0' }}>
@@ -25,6 +26,12 @@ function CountChart({ data }) {
                     <g key={i}>
                         <line x1={-4} y1={yScale(i)} x2={innerW} y2={yScale(i)} stroke="#eee" />
                         <text x={-8} y={yScale(i) + 4} textAnchor="end" fontSize={11} fill="#666">{i}</text>
+                    </g>
+                ))}
+                {xTicks.map(i => (
+                    <g key={i}>
+                        <line x1={xScale(i)}  y1={innerH} x2={xScale(i)} y2={innerH + 4} stroke="#666"/>
+                        <text x={xScale(i)} y={innerH + 18} textAnchor="middle" fontSize={11} fill="#666">{i}</text>
                     </g>
                 ))}
                 <polyline points={points} fill="none" stroke="#22c55e" strokeWidth={2} />
@@ -116,8 +123,9 @@ export default function Video() {
             {response &&
                 <>
                     <video src={response.video_url} controls />
-                    <h3>Salamanders on Screen Over Time</h3>
+                    <h3>Count of Salamanders at each second</h3>
                     {response.count_over_time && <CountChart data={response.count_over_time} />}
+                    <h3>Time of screen per individual salamander</h3>
                     <table>
                         <thead>
                             <tr>
