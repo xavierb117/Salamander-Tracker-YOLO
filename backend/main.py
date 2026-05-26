@@ -57,6 +57,8 @@ def run_track_job():
 
         frames_seen = defaultdict(int)
         label_for = {}
+        count_over_time = []
+        sample_interval = max(1, int(round(fps)))
 
         for frame_idx in range(total):
             ok, frame = cap.read()
@@ -66,14 +68,9 @@ def run_track_job():
             writer.write(result.plot())
             job["percent"] = int(((frame_idx + 1) / total) * 100)
             boxes = result.boxes
-            if boxes.id is None:
-                cv2.putText(frame, "No Salamanders", (10, 30),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 200, 200), 2)
-            else:
-                count = len(boxes.id.tolist())
-                text = f"Salamanders: {count}"
-                cv2.putText(frame, text, (10, 30),
-                        cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+            count = len(boxes.id.tolist()) if boxes.id is not None else 0
+            if frame_idx % sample_interval == 0:
+                count_over_time.append({"time_s": round(frame_idx / fps, 1), "count": count})
             if boxes is not None and boxes.id is not None:
                 for tid, cls_id in zip(boxes.id.tolist(), boxes.cls.tolist()):
                     frames_seen[int(tid)] += 1
@@ -98,6 +95,7 @@ def run_track_job():
         job["result"] = {
             "video_url": f"http://localhost:8000/videos/output.mp4?t={int(time.time())}",
             "tracks": tracks,
+            "count_over_time": count_over_time,
         }
     except Exception as e: 
         print(f"error: {e}", flush=True)
